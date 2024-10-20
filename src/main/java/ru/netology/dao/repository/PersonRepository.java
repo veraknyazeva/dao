@@ -1,25 +1,22 @@
 package ru.netology.dao.repository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.netology.dao.entity.Person;
+import ru.netology.dao.entity.PersonsPK;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-@Slf4j
-public class PersonRepository {
-    @PersistenceContext
-    private EntityManager entityManager;
+public interface PersonRepository extends JpaRepository<Person, PersonsPK> {
 
-    @Transactional
-    public List<Person> getPersonsByCity(String city) {
-        List<Person> personList = entityManager.createQuery("SELECT p FROM Person p WHERE LOWER(p.cityOfLiving) = :city", Person.class)
-                .setParameter("city", city.toLowerCase())
-                .getResultList();
-        return personList;
-    }
+    List<Person> findPersonByCityOfLiving(String city);
+
+    List<Person> findAllByPersonsPK_AgeLessThanOrderByPersonsPK_ageAsc(Long age);
+
+    Optional<Person> findPersonByPersonsPK_NameAndPersonsPK_Surname(String name, String surname);
+
 }
+
+

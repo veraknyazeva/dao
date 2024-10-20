@@ -7,6 +7,7 @@ import ru.netology.dao.entity.Person;
 import ru.netology.dao.repository.PersonRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class PersonController {
@@ -16,8 +17,18 @@ public class PersonController {
         this.personRepository = personRepository;
     }
 
-    @GetMapping("/persons/by-city")
-    public List<Person> getPersonsByCity(@RequestParam String city) {
-        return personRepository.getPersonsByCity(city);
+    @GetMapping("person/by/city")
+    public List<Person> findPersonByCity(@RequestParam String city) {
+        return personRepository.findPersonByCityOfLiving(city);
+    }
+
+    @GetMapping("/persons/by-name-and-surname")
+    public Optional<Person> findPerson(@RequestParam String name, @RequestParam String surname) {
+        return personRepository.findPersonByPersonsPK_NameAndPersonsPK_Surname(name, surname);
+    }
+
+    @GetMapping("person/by/age")
+    public List<Person> findAge(@RequestParam Long age) {
+        return personRepository.findAllByPersonsPK_AgeLessThanOrderByPersonsPK_ageAsc(age);
     }
 }
